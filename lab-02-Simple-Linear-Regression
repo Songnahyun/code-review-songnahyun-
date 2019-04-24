@@ -1,0 +1,70 @@
+import tensorflow as tf
+import numpy as np
+tf.enable_eager_execution()
+# eager_execution을 활성화 시킵니다.(즉시 실행하게 하는 것)
+
+# Data
+x_data = [1, 2, 3, 4, 5]
+y_data = [1, 2, 3, 4, 5]
+# x데이터는 input(입력), y데이터는 output(출력) 이고 여기에서는 입력과 출력이 같습니다. 
+데이터를 간단한 모델로 만들면 입력과W와 b값을 예측해 볼 수 있습니다.
+
+# W, b initialize
+W = tf.Variable(2.9)
+b = tf.Variable(0.5)
+# 텐서플로우의 variable로 정의를 했고 각각 2.9와 0.5를 초기 값으로 지정합니다. 
+(초기값은 임의의 값)
+
+hypothesis = W * x_data + b
+# 가설함수(hypothesis 함수)
+cost = tf.reduce_mean(tf.square(hypothesis - y_data))
+# cost 함수를 그대로 입력한 것
+
+
+# W, b update
+for i in range(100):
+# for문으로 w,b값을 위해서 100번을 수행하라는 의미입니다.
+    # Gradient descent
+    with tf.GradientTape() as tape:
+        hypothesis = W * x_data + b
+        cost = tf.reduce_mean(tf.square(hypothesis - y_data))
+
+# gradient descent를 텐서플로우 에서는gradienttape으로 구현함. 변수들(w, b)의 변화를 tape에 기록한다는 의미입니다.
+   
+ W_grad, b_grad = tape.gradient(cost, [W, b])
+
+# Tape에 그레디언트 메소드를 호출하여 변수들에 대한 미분 값(기울기)을 구함. W_grad는 w의 기울기이고 b_grad는 b의 기울기입니다.
+  
+
+
+
+
+  W.assign_sub(learning_rate * W_grad)
+    b.assign_sub(learning_rate * b_grad)
+
+# w와b값이 지속적으로 계속 갱신(업데이트)하는 부분. Learning rate는 gradient 값(기울기)을 어느정도 반영할 건지 결정하는 역할입니다.
+*A.assign_sub(B)-> A=A-B
+   
+ if i % 10 == 0:
+      print("{:5}|{:10.4f}|{:10.4f}|{:10.6f}".format(i, W.numpy(), b.numpy(), cost))
+
+# w와b값,cost값이 어떻게 갱신되어가는지 10번에 한 번씩 출력하라는 의미입니다.
+
+print()
+
+# predict
+print(W * 5 + b)
+print(W * 2.5 + b)
+
+    0|    2.4520|    0.3760| 45.660004
+   10|    1.1036|    0.0034|  0.206336
+   20|    1.0128|   -0.0209|  0.001026
+   30|    1.0065|   -0.0218|  0.000093
+   40|    1.0059|   -0.0212|  0.000083
+   50|    1.0057|   -0.0205|  0.000077
+   60|    1.0055|   -0.0198|  0.000072
+   70|    1.0053|   -0.0192|  0.000067
+   80|    1.0051|   -0.0185|  0.000063
+   90|    1.0050|   -0.0179|  0.000059
+
+# 결과: w값은 1로 수렴, b값은 0에 가까운 값으로 수렴하고있고 Cost는 100번이상 실행했을 때 0에 가까운 값으로 작아집니다.(=우리의 모델이 실제값 예측을 맞게 했다는 의미! cost값이 작으면 작을수록 좋음.)
