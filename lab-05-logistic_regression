@@ -14,7 +14,7 @@ b = tf.Variable(tf.zeros([1]), name='bias')
 def logistic_regression(featrues):
   hypothesis = tf.div(1., 1, + tf.exp(tf.matmul(features, W) + b))
      # W(x) + b에 대한 linear한 값을 sigmoid funtion 시그모이드 함수를 구할 수 있습니다.
-       logistic legression을 구하기 위한 hypothesis 를 그려낸다.
+       logistic legression을 구하기 위한 hypothesis 를 그려냅니다.
        
   return hypothesis
 def loss_fn(features, labels):   
