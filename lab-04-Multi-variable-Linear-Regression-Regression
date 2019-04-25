@@ -1,7 +1,9 @@
 import tensorflow as tf
 import numpy as np
+#tensorflow 라이브러리와 numpy라이브러리를 가져옵니다.
 
 tf.enable_eager_execution()
+#eager모드로 실행하기 위해서 eager_excution을 실행합니다.
 tf.__version__
 
 # Random
